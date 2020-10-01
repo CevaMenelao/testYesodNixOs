@@ -20,3 +20,4 @@ import           Database.Persist.Sql ( fromSqlKey )
 
 holamundo :: Html ()
 holamundo = div_ [] $ p_ [] "Hola mundo"
+
