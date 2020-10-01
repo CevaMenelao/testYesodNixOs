@@ -4,17 +4,17 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 module Handler.Home where
-
 import Import
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
 import Text.Julius (RawJS (..))
-
+import Lucid.Yesod_ejemplo1
+import Lucid hiding (Html, toHtml)
+import Text.Blaze.Html
 -- Define our data that will be used for creating the form.
 data FileForm = FileForm
     { fileInfo :: FileInfo
     , fileDescription :: Text
     }
-
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
 -- config/routes.yesodroutes
@@ -24,32 +24,27 @@ data FileForm = FileForm
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
-    (formWidget, formEnctype) <- generateFormPost sampleForm
-    let submission = Nothing :: Maybe FileForm
-        handlerName = "getHomeR" :: Text
-    allComments <- runDB $ getAllComments
-
     defaultLayout $ do
-        let (commentFormId, commentTextareaId, commentListId) = commentIds
-        aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
-        $(widgetFile "homepage")
+        setTitle "Simón!"
+        -- $(widgetFile "homepage")
+        toWidget . preEscapedToHtml . renderText $ holamundo
 
 postHomeR :: Handler Html
-postHomeR = do
+postHomeR = undefined {-do
     ((result, formWidget), formEnctype) <- runFormPost sampleForm
     let handlerName = "postHomeR" :: Text
         submission = case result of
             FormSuccess res -> Just res
             _ -> Nothing
     allComments <- runDB $ getAllComments
-
     defaultLayout $ do
         let (commentFormId, commentTextareaId, commentListId) = commentIds
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
+-}
 
+{-
 sampleForm :: Form FileForm
 sampleForm = renderBootstrap3 BootstrapBasicForm $ FileForm
     <$> fileAFormReq "Choose a file"
@@ -65,9 +60,11 @@ sampleForm = renderBootstrap3 BootstrapBasicForm $ FileForm
                 , ("placeholder", "File description")
                 ]
             }
-
 commentIds :: (Text, Text, Text)
 commentIds = ("js-commentForm", "js-createCommentTextarea", "js-commentList")
-
 getAllComments :: DB [Entity Comment]
 getAllComments = selectList [] [Asc CommentId]
+-}
+
+getEnriquR :: Handler Html
+getEnriquR = undefined
